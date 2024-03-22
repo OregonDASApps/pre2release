@@ -13,11 +13,13 @@ inputs:
   prerelease:
     required: false
     default: no
-  
+  REQUIRE_PRERELEASE:
+    required: false
+    default: 'true'
   
 outputs:
   version:
     description: version
 runs:
-  using: "node16"
+  using: "node20"
   main: src/index.js

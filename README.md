@@ -6,7 +6,7 @@ pre2release is an action to automatically finds repository's latest pre-release 
 ```YAML
 - name: 'Get json subbed'
   id: subbed
-  uses: "snsinahub-org/pre2release@v1.0.0"
+  uses: "snsinahub-org/pre2release@v2.0.0"
   with:
   
     # List of variables
@@ -20,7 +20,7 @@ pre2release is an action to automatically finds repository's latest pre-release 
     token: ${{ github.token }}
     
         
-    # Description:  You can add a prefix to semver e.g. v1.0.0 
+    # Description:  You can add a prefix to semver e.g. v2.0.0 
     # Required: false
     # Default: ''
     prefix: ''
@@ -32,6 +32,12 @@ pre2release is an action to automatically finds repository's latest pre-release 
     # Default: 'no'
     # Accepted values: no, yes
     prerelease:
+
+    # Description: returns latest version if set to 'false' and throws error if set to 'true' and newest release tag is not pre-release
+    # Required: false
+    # Default: 'true'
+    # Accepted values: 'false', 'true'
+    REQUIRE_PRERELEASE:
     
     
 ```
@@ -45,7 +51,7 @@ pre2release is an action to automatically finds repository's latest pre-release 
 ## Example
 ```YAML
 name: pre2release
-description: pre2release@v1.0.0
+description: pre2release@v2.0.0
 on:
   workflow_dispatch:
   
@@ -61,9 +67,10 @@ jobs:
           node-version: 16      
       - name: 'Convert pre-release to release'
         id: version
-        uses: "snsinahub-org/pre2release@v1.0.0"
+        uses: "snsinahub-org/pre2release@v2.0.0"
         with:          
-          prefix: 'v'                 
+          prefix: 'v'
+          REQUIRE_PRERELEASE: 'true'
       - name: 'print version'
         run: |
          echo ${{ steps.version.outputs.version }}

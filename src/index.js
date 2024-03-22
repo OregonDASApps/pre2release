@@ -11,6 +11,7 @@ async function run() {
     const myToken = core.getInput('token');
     const prefix = core.getInput('prefix');
     const prerelease = core.getInput('prerelease');
+    const REQUIRE_PRERELEASE = core.getInput('REQUIRE_PRERELEASE');
     const repoFull = core.getInput('repo').split('/');
     const tags = new getTags();
     let owner = repoFull[0];
@@ -49,11 +50,13 @@ async function run() {
         // newVersion = jsonUtils.upgradeVersion(latestVersion, type, prefix);
 
 
+    } else if(REQUIRE_PRERELEASE == 'false' && prereleaseIsNewest == false) {
+        latestVersion = tagsObj[0].name //jsonUtils.firstItem('tagName');
     } else {
-        latestVersion = "No release found";
+        core.setFailed('Error: No release found');
     }
 
-   
+    console.log(prereleaseIsNewest, latestVersion, REQUIRE_PRERELEASE)
 
 
     fs.appendFileSync(process.env.GITHUB_OUTPUT, "version=" + latestVersion);
