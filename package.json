@@ -24,9 +24,9 @@
   "homepage": "https://github.com/snsinahub-org/last-release#readme",
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "@actions/github": "^5.1.1",
+    "@actions/github": "^6.0.0",
     "@octokit/graphql": "^5.0.5",
-    "@octokit/rest": "^19.0.7",
+    "@octokit/rest": "^21.1.1",
     "lodash": "^4.17.21"
   }
 }
