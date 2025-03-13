@@ -6,7 +6,7 @@ pre2release is an action to automatically finds repository's latest pre-release 
 ```YAML
 - name: 'Get json subbed'
   id: subbed
-  uses: "snsinahub-org/pre2release@v2.0.0"
+  uses: "snsinahub-org/pre2release@v2.1.1"
   with:
   
     # List of variables
@@ -20,7 +20,7 @@ pre2release is an action to automatically finds repository's latest pre-release 
     token: ${{ github.token }}
     
         
-    # Description:  You can add a prefix to semver e.g. v2.0.0 
+    # Description:  You can add a prefix to semver e.g. v2.1.1 
     # Required: false
     # Default: ''
     prefix: ''
@@ -38,6 +38,13 @@ pre2release is an action to automatically finds repository's latest pre-release 
     # Default: 'true'
     # Accepted values: 'false', 'true'
     REQUIRE_PRERELEASE:
+
+
+    # Description:  You can search for a specific pre-release tag by adding starts-with: e.g. v2.2
+    # If you use starts-with, prefix will be ignored
+    # Required: false
+    # Default: ''
+    starts-with:
     
     
 ```
@@ -51,7 +58,7 @@ pre2release is an action to automatically finds repository's latest pre-release 
 ## Example
 ```YAML
 name: pre2release
-description: pre2release@v2.0.0
+description: pre2release@v2.1.1
 on:
   workflow_dispatch:
   
@@ -67,7 +74,7 @@ jobs:
           node-version: 16      
       - name: 'Convert pre-release to release'
         id: version
-        uses: "snsinahub-org/pre2release@v2.0.0"
+        uses: "snsinahub-org/pre2release@v2.1.1"
         with:          
           prefix: 'v'
           REQUIRE_PRERELEASE: 'true'

@@ -1,8 +1,8 @@
 'use strict';
 
-const _ = require('lodash');
+import _ from 'lodash';
 
-module.exports = class JsonUtils {
+class JsonUtils {
 
     constructor(jsonObj) {
         this.jsonObj = jsonObj
@@ -39,8 +39,20 @@ module.exports = class JsonUtils {
     }
 
     // return first item after sorting tags
-    firstItem(keyName) {
-        let first = this.jsonObj[0][keyName]
+    firstItem(keyName, prerelease) {
+        let first = ''
+        if(prerelease == 'true') {
+            let matched = _.filter(this.jsonObj, function(obj) {
+                return obj.isPrerelease == true
+            })
+            if(matched.length > 0) {                
+                first = matched[0][keyName]
+            }
+        } else {
+            if(this.jsonObj.length > 0) {
+                first = this.jsonObj[0][keyName]
+            }
+        }        
         return first
     }
 
@@ -79,6 +91,72 @@ module.exports = class JsonUtils {
         return sorted;
     }
 
+    filterByStartsWith(startsWith) {
+
+        const regex = new RegExp(`^${startsWith.replace(/\./g, '\\.').replace(/\*/g, '.*')}`);
+
+        // Filter the jsonObj based on the parsed startsWith string
+        let matched = _.filter(this.jsonObj, function(obj) {
+            return regex.test(obj.tagName);
+        });        
+
+        let plain = _.map(matched, function(o){
+            let version = o.tagName.replace(startsWith, '').split('.')
+            
+            let obj = {
+                "name": o.name,
+                "createdAt": o.createdAt,
+                "tagName": o.tagName,
+                "tag": parseInt(o.tagName.replace(startsWith, '').replace(/\./g, '')),
+                "major": parseInt(version[0]),
+                "minor": parseInt(version[1]),
+                "patch": parseInt(version[2]),
+                "isPrerelease": o.isPrerelease
+            }
+                        
+            return obj
+        })
+
+        
+        let sorted = _.orderBy(plain, ['major', 'minor', 'patch'], ['desc', 'desc', 'desc'])
+
+        this.jsonObj = plain;
+
+        return plain;
+
+        // let matched = _.filter(this.jsonObj, function(obj) { 
+
+        //     if( obj.isPrerelease == true) {
+        //         return obj.tagName.startsWith(startsWith)
+        //     }
+        // })
+
+        // let plain = _.map(matched, function(o){
+        //     let version = o.tagName.replace(startsWith, '').split('.')
+            
+        //     let obj = {
+        //         "name": o.name,
+        //         "createdAt": o.createdAt,
+        //         "tagName": o.tagName,
+        //         "tag": parseInt(o.tagName.replace(startsWith, '').replace(/\./g, '')),
+        //         "major": parseInt(version[0]),
+        //         "minor": parseInt(version[1]),
+        //         "patch": parseInt(version[2]),
+        //         "isPrerelease": o.isPrerelease
+        //     }
+                        
+        //     return obj
+        // })
+        
+        // let sorted = _.orderBy(plain, ['major', 'minor', 'patch'], ['desc', 'desc', 'desc'])
+        
+        // if(startsWith != '') {
+        //     this.jsonObj = sorted;
+        // }
+
+        // return sorted;
+    }
+
     // filter and sort tags when there is no tag's prefix
     filterNoPrefix() {
         let matched = _.filter(this.jsonObj, function(obj) { 
@@ -113,3 +191,5 @@ module.exports = class JsonUtils {
         return sorted;
     }
 }
+
+export default JsonUtils;

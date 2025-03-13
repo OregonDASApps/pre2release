@@ -16,6 +16,9 @@ inputs:
   REQUIRE_PRERELEASE:
     required: false
     default: 'true'
+  starts-with:
+    required: false
+    default: ''
   
 outputs:
   version:

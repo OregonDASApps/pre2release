@@ -1,11 +1,11 @@
 'use strict';
 
-const { Octokit } = require("@octokit/rest");
-const github = require('@actions/github');
-const fs = require('fs');
+import * as github from '@actions/github';
 
+import { Octokit } from "@octokit/rest";
+import fs from 'fs';
 
-module.exports = class Releases {
+class Releases {
     constructor(token) {
         this.token = token;
         this.ops = {
@@ -85,10 +85,8 @@ module.exports = class Releases {
     compareReleases(first, firstMatched, prefix) {
         let firstTag = this.convertTagToInt(first.tagName, prefix)
         let firstMatchedTag = firstMatched.tag
-        if(firstMatchedTag >= firstTag) {
-            return true
-        } else {
-            return false
-        }
+        return true;        
     }
 }
+
+export default Releases;
